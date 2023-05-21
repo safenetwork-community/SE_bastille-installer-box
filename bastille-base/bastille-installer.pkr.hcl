@@ -31,11 +31,11 @@ variable "ssh_username" {
 
 locals {
   boot_command_qemu = [
-    "<wait5><enter><wait90s>",
+    "<wait5><enter><wait2m>",
     "curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/${local.kickstart_script} && chmod +x ${local.kickstart_script} && ./${local.kickstart_script} {{ .HTTPPort }}<enter>",
   ]
   boot_command_virtualbox = [
-    "<enter><wait90s>",
+    "<enter><wait2m>",
     "curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/${local.kickstart_script} && chmod +x ${local.kickstart_script} && ./${local.kickstart_script} {{ .HTTPPort }}<enter>",
   ]
   cpus              = 1
@@ -43,9 +43,9 @@ locals {
   efi_firmware_code = "/usr/share/edk2-ovmf/x64/OVMF_CODE.fd"
   efi_firmware_vars = "/usr/share/edk2-ovmf/x64/OVMF_VARS.fd"
   headless          = "false"
-  iso_checksum      = "file:https://mirrors.edge.kernel.org/archlinux/iso/{{isotime \"2006.01\"}}.01/sha256sums.txt"
-  iso_url           = "https://mirrors.edge.kernel.org/archlinux/iso/{{isotime \"2006.01\"}}.01/archlinux-{{isotime \"2006.01\"}}.01-x86_64.iso"
-  kickstart_script  = "cfg_liveVM.sh"
+  iso_checksum      = "sha256:329b00c3e8cf094a28688c50a066b5ac6352731ccdff467f9fd7155e52d36cec"
+  iso_url           = "https://mirror.cj2.nl/archlinux/iso/2023.05.03/archlinux-x86_64.iso"
+  kickstart_script  = "initLiveVM.sh"
   machine_type      = "q35"
   memory            = 4096
   http_directory    = "srv"
@@ -95,10 +95,10 @@ build {
     execute_command = "{{ .Vars }} sudo -E -S bash '{{ .Path }}'"
     expect_disconnect = true
     scripts           = [
-    "scripts/configure-qemu.sh",
-    "scripts/configure-shared.sh",
-    "scripts/partition-table-gpt.sh",
-    "scripts/partition-ext4-efi.sh",
+    "scripts/liveVM.sh",
+    "scripts/tables.sh",
+    "scripts/partitions.sh",
+    "scripts/mirror.sh",
     "scripts/setup.sh"
     ]
   }

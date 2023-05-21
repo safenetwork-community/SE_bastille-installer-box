@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-. /tmp/files/vars.sh
+. /root/vars.sh
 
-NAME_SH=partition-ext4-efi.sh
+NAME_SH=partitions.sh
 
 # stop on errors
 set -eu

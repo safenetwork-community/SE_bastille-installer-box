@@ -16,6 +16,7 @@ vm_name = "bastille-installer_qemu_archlinux-2023-04.qcow2"
 
 # Folder locations
 path_output = "./output"
+path_output_os = "./output-artix"
 path_virt_manager = "/var/lib/libvirt/images/"
 
 # File locations
@@ -23,8 +24,12 @@ location_vm_old = f"{path_output}/{vm_name}"
 location_vm_new = f"{path_virt_manager}/{vm_name}"
 
 # delete output folder if it exists
-if Path(output_folder).is_dir(): 
-    subprocess.run(["rm", "-r", "output"])
+if Path(path_output).is_dir(): 
+    subprocess.run(["rm", "-r", path_output])
+
+# delete os output folder if it exists
+if Path(path_output_os).is_dir(): 
+    subprocess.run(["rm", "-r", path_output_os])
 
 # Run packer
 args = [command, subcommand, template]
