@@ -8,14 +8,14 @@ NAME_SH=base.sh
 set -eu
 
 echo "==> ${NAME_SH}: Installing base system.."
-/usr/bin/basestrap ${ROOT_DIR} base base-devel ${INIT_TYPE} elogind-${INIT_TYPE} &>/dev/null
+/usr/bin/pacstrap ${ROOT_DIR} base base-devel &>/dev/null
 
 if [ "${FS_TYPE}" = "btrfs" ]; then
-  /usr/bin/basestrap ${ROOT_DIR} btrfs-progs
+  /usr/bin/pacstrap ${ROOT_DIR} btrfs-progs
 fi
 
 echo "==> ${NAME_SH}: Installing kernel.."
-/usr/bin/basestrap ${ROOT_DIR} linux linux-firmware >/dev/null
+/usr/bin/pacstrap ${ROOT_DIR} linux linux-firmware >/dev/null
 
 echo "==> ${NAME_SH}: Generating the filesystem table.."
-/usr/bin/fstabgen -U ${ROOT_DIR} | tee -a "${ROOT_DIR}/etc/fstab" >/dev/null
+/usr/bin/genfstab -U ${ROOT_DIR} | tee -a "${ROOT_DIR}/etc/fstab" >/dev/null

@@ -7,6 +7,9 @@ NAME_SH=setup.sh
 # stop on errors
 set -eu
 
+echo ">>>> ${NAME_SH}: Generating the system configuration script.."
+/usr/bin/install --mode=0755 /dev/null "${ROOT_DIR}${CONFIG_SCRIPT}"
+
 CONFIG_SCRIPT_SHORT=`basename "$CONFIG_SCRIPT"`
 tee "${ROOT_DIR}${CONFIG_SCRIPT}" &>/dev/null << EOF
   echo "==> ${CONFIG_SCRIPT_SHORT}: Configuring hostname, timezone, and keymap.."
@@ -36,7 +39,6 @@ tee "${ROOT_DIR}${CONFIG_SCRIPT}" &>/dev/null << EOF
   /usr/bin/pacman -S --noconfirm ntp
   /usr/bin/systemctl enable ntpd 
   echo "==> ${CONFIG_SCRIPT_SHORT}: Installing ${ISCR} non-AUR dependencies.."
-  /usr/bin/pacman -S --noconfirm base-devel
   /usr/bin/pacman -S --noconfirm wget git parted 
   /usr/bin/pacman -S --noconfirm dialog dosfstools f2fs-tools polkit qemu-user-static-binfmt 
   # Vagrant user apparently created through pacstrap for Arch Linux.

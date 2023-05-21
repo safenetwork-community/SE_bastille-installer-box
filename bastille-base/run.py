@@ -12,7 +12,7 @@ subcommand = "build"
 
 # File names
 template = "bastille-installer.pkr.hcl"
-vm_name = "bastille-installer_qemu_archlinux-2023-04.qcow2"
+vm_name = "bastille-installer_qemu_archlinux-2023-05.qcow2"
 
 # Folder locations
 path_output = "./output"
@@ -34,10 +34,9 @@ if Path(path_output_os).is_dir():
 # Run packer
 args = [command, subcommand, template]
 print(' '.join(args)) 
-
 subprocess.run(args)
 
-
+# Move box to virt-manager 
 if Path(path_output).exists() and Path(path_output).is_dir():  
     subprocess.run(["sudo", "chown", "libvirt-qemu:libvirt-qemu", location_vm_old])
     subprocess.run(["sudo", "chmod", "600", location_vm_old])
