@@ -13,14 +13,14 @@ echo ">>>> ${NAME_SH}: Generating the system configuration script.."
 CONFIG_SCRIPT_SHORT=`basename "$CONFIG_SCRIPT"`
 tee "${ROOT_DIR}${CONFIG_SCRIPT}" &>/dev/null << EOF
   echo "==> ${CONFIG_SCRIPT_SHORT}: Configuring hostname, timezone, and keymap.."
-  echo '${HOSTNAME_BOX}' | tee /etc/hostname
+  echo '${HOSTNAME_BOX}' | tee /etc/hostname >/dev/null
   /usr/bin/ln -s /usr/share/zoneinfo/${TIMEZONE_BOX} /etc/localtime
-  echo 'KEYMAP=${KEYMAP_BOX}' | tee /etc/vconsole.conf
+  echo 'KEYMAP=${KEYMAP_BOX}' | tee /etc/vconsole.conf >/dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Configuring locale.."
   /usr/bin/sed -i 's/#${LANGUAGE_BOX}/${LANGUAGE_BOX}/' /etc/locale.gen
-  /usr/bin/locale-gen
+  /usr/bin/locale-gen /dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Creating initramfs.."
-  /usr/bin/mkinitcpio -p linux
+  /usr/bin/mkinitcpio -p linux &>/dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Setting root pasword.."
   /usr/bin/usermod --password ${ROOT_PASSWORD} root
   echo "==> ${CONFIG_SCRIPT_SHORT}: Configuring network.."
@@ -33,24 +33,24 @@ tee "${ROOT_DIR}${CONFIG_SCRIPT}" &>/dev/null << EOF
   /usr/bin/systemctl enable sshd.service
   # Workaround for https://bugs.archlinux.org/task/58355 which prevents sshd to accept connections after reboot
   echo "==> ${CONFIG_SCRIPT_SHORT}: Adding workaround for sshd connection issue after reboot.."
-  /usr/bin/pacman -S --noconfirm rng-tools
+  /usr/bin/pacman -S --noconfirm rng-tools >/dev/null
   /usr/bin/systemctl enable rngd
   echo "==> ${CONFIG_SCRIPT_SHORT}: Enable time synching.."
-  /usr/bin/pacman -S --noconfirm ntp
-  /usr/bin/systemctl enable ntpd 
+  /usr/bin/pacman -S --noconfirm ntp >/dev/null 
+  /usr/bin/systemctl enable ntpd  
   echo "==> ${CONFIG_SCRIPT_SHORT}: Installing ${ISCR} non-AUR dependencies.."
-  /usr/bin/pacman -S --noconfirm wget git parted 
-  /usr/bin/pacman -S --noconfirm dialog dosfstools f2fs-tools polkit qemu-user-static-binfmt 
+  /usr/bin/pacman -S --noconfirm wget git parted >/dev/null
+  /usr/bin/pacman -S --noconfirm dialog dosfstools f2fs-tools polkit qemu-user-static-binfmt >/dev/null 
   # Vagrant user apparently created through pacstrap for Arch Linux.
   echo "==> ${CONFIG_SCRIPT_SHORT}: Modifying vagrant user.."
   /usr/bin/useradd --comment 'Vagrant User' -d /home/${USER_NAME} --user-group ${USER_GROUP}
-  /usr/bin/echo -e "${USER_PASSWORD}\n${USER_PASSWORD}" | /usr/bin/passwd ${USER_NAME}
+  /usr/bin/echo -e "${USER_PASSWORD}\n${USER_PASSWORD}" | /usr/bin/passwd ${USER_NAME} &>/dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Configuring sudo.."
-  echo "Defaults env_keep += \"SSH_AUTH_SOCK\"" | tee /etc/sudoers.d/10_${USER_NAME}
-  echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" | tee -a /etc/sudoers.d/10_${USER_NAME}
+  echo "Defaults env_keep += \"SSH_AUTH_SOCK\"" | tee /etc/sudoers.d/10_${USER_NAME} &>/dev/null
+  echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" | tee -a /etc/sudoers.d/10_${USER_NAME} &>/dev/null
   /usr/bin/chmod 0440 /etc/sudoers.d/10_${USER_NAME}
   echo "==> ${CONFIG_SCRIPT_SHORT}: Cleaning up.."
-  /usr/bin/pacman -Rcns --noconfirm gptfdisk
+  /usr/bin/pacman -Rcns --noconfirm gptfdisk >/dev/null
 EOF
 
 echo "==> ${NAME_SH}: Entering chroot and configuring system.."
