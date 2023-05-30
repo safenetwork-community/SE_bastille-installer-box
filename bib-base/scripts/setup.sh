@@ -7,7 +7,7 @@ NAME_SH=setup.sh
 # stop on errors
 set -eu
 
-echo ">>>> ${NAME_SH}: Generating the system configuration script.."
+echo "==> ${NAME_SH}: Generating the system configuration script.."
 /usr/bin/install --mode=0755 /dev/null "${ROOT_DIR}${CONFIG_SCRIPT}"
 
 CONFIG_SCRIPT_SHORT=`basename "$CONFIG_SCRIPT"`
@@ -27,17 +27,17 @@ tee "${ROOT_DIR}${CONFIG_SCRIPT}" &>/dev/null << EOF
   # Disable systemd Predictable Network Interface Names and revert to traditional interface names
   # https://wiki.archlinux.org/index.php/Network_configuration#Revert_to_traditional_interface_names
   /usr/bin/ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
-  /usr/bin/systemctl enable dhcpcd@eth0.service
+  /usr/bin/systemctl enable dhcpcd@eth0.service &>/dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Configuring sshd.."
   /usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
-  /usr/bin/systemctl enable sshd.service
+  /usr/bin/systemctl enable sshd.service &>/dev/null
   # Workaround for https://bugs.archlinux.org/task/58355 which prevents sshd to accept connections after reboot
   echo "==> ${CONFIG_SCRIPT_SHORT}: Adding workaround for sshd connection issue after reboot.."
   /usr/bin/pacman -S --noconfirm rng-tools >/dev/null
-  /usr/bin/systemctl enable rngd
+  /usr/bin/systemctl enable rngd &>/dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Enable time synching.."
   /usr/bin/pacman -S --noconfirm ntp >/dev/null 
-  /usr/bin/systemctl enable ntpd  
+  /usr/bin/systemctl enable ntpd &>/dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Installing ${ISCR} non-AUR dependencies.."
   /usr/bin/pacman -S --noconfirm wget git parted >/dev/null
   /usr/bin/pacman -S --noconfirm dialog dosfstools f2fs-tools polkit qemu-user-static-binfmt >/dev/null 

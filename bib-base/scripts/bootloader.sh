@@ -18,4 +18,4 @@ echo "==> ${NAME_SH}: Installing grub.."
 /usr/bin/arch-chroot ${ROOT_DIR} grub-mkconfig -o /boot/grub/grub.cfg &>/dev/null
 
 echo "==> ${NAME_SH}: Check boots.."
-/usr/bin/arch-chroot ${ROOT_DIR} efibootmgr >/dev/null
+/usr/bin/arch-chroot ${ROOT_DIR} efibootmgr

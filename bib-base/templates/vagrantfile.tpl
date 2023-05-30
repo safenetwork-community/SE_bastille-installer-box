@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
     lv.cpus = 1
     lv.default_prefix = "bastille-installer"
     lv.description = "The safest way to install the safenetwork app on a Manjaro Linux OS for your SBC. Don't forget to add your SD card."
-    lv.loader = "/usr/share/edk2-ovmf/x64/OVMF_CODE.fd"
+    lv.loader = "/usr/share/edk2-ovmf/x64/OVMF_CODE.4m.fd"
     lv.machine_type = "q35"
     lv.memory = 512
     lv.title = "Bastille Flasher v0.5.0"

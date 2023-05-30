@@ -12,7 +12,7 @@ echo "==> ${NAME_SH}: Lock root password.."
 /usr/bin/passwd -l root >/dev/null
 
 echo "==> ${NAME_SH}: Update the system clock.."
-/usr/bin/pacman --noconfirm -Sy ntp
+/usr/bin/pacman --noconfirm -Sy ntp >/dev/null
 /usr/bin/systemctl start ntpd >/dev/null
 
 echo "==> ${NAME_SH}: Modifying local settings.."
