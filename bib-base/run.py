@@ -7,8 +7,8 @@ command = "packer"
 subcommand = "build"
 
 # File names
-template = "bastillebox-installer.pkr.hcl"
-vm_name = "bastillebox-installer_qemu_archlinux-2023-05.qcow2"
+template = "bastillebox-installer-box.pkr.hcl"
+vm_name = "bastillebox-installer-box_qemu_archlinux-2023-05.qcow2"
 
 # Folder locations
 path_output = "./output"
@@ -34,9 +34,10 @@ subprocess.run(args)
 
 # Move box to virt-manager 
 if Path(path_output).exists() and Path(path_output).is_dir():  
-    subprocess.run(["sudo", "chown", "libvirt-qemu:libvirt-qemu", location_vm_old])
-    subprocess.run(["sudo", "chmod", "600", location_vm_old])
-    subprocess.run(["sudo", "mv", location_vm_old, location_vm_new])
+    subprocess.run(["sudo", "qemu-img", "info", location_vm_old])
+    # subprocess.run(["sudo", "chown", "libvirt-qemu:libvirt-qemu", location_vm_old])
+    # subprocess.run(["sudo", "chmod", "600", location_vm_old])
+    # subprocess.run(["sudo", "mv", location_vm_old, location_vm_new])
     #subprocess.run(["sudo", "virt-install",
     #                "--name", "bastille-installer",
     #                "--vcpu", "2",

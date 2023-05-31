@@ -49,7 +49,7 @@ locals {
   machine_type      = "q35"
   memory            = 4096
   http_directory    = "srv"
-  vm_name           = "bastille-installer"
+  vm_name           = "bastillebox-installer-box"
   write_zeros       = "true"
 }
 
@@ -82,7 +82,7 @@ source "qemu" "archlinux" {
 }
 
 build {
-  name = "bastille-installer"
+  name = "bastillebox-installer-box"
   sources = ["source.qemu.archlinux"]
   
   provisioner "file" {
