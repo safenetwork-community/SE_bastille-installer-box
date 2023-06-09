@@ -18,7 +18,7 @@ tee "${ROOT_DIR}${CONFIG_SCRIPT}" &>/dev/null << EOF
   echo 'KEYMAP=${KEYMAP_BOX}' | tee /etc/vconsole.conf >/dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Configuring locale.."
   /usr/bin/sed -i 's/#${LANGUAGE_BOX}/${LANGUAGE_BOX}/' /etc/locale.gen
-  /usr/bin/locale-gen /dev/null
+  /usr/bin/locale-gen >/dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Creating initramfs.."
   /usr/bin/mkinitcpio -p linux &>/dev/null
   echo "==> ${CONFIG_SCRIPT_SHORT}: Setting root pasword.."

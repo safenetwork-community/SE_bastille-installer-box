@@ -40,8 +40,8 @@ locals {
   ]
   cpus              = 1
   disk_size         = "4G"
-  efi_firmware_code = "/usr/share/edk2/x64/OVMF_CODE.4m.fd"
-  efi_firmware_vars = "/usr/share/edk2/x64/OVMF_VARS.4m.fd"
+  efi_firmware_code = "/usr/share/edk2/x64/OVMF_CODE.fd"
+  efi_firmware_vars = "/usr/share/edk2/x64/OVMF_VARS.fd"
   headless          = "false"
   iso_checksum      = "sha256:329b00c3e8cf094a28688c50a066b5ac6352731ccdff467f9fd7155e52d36cec"
   iso_url           = "https://mirror.cj2.nl/archlinux/iso/2023.05.03/archlinux-x86_64.iso"
@@ -49,7 +49,7 @@ locals {
   machine_type      = "q35"
   memory            = 4096
   http_directory    = "srv"
-  vm_name           = "bastillebox-installer-box"
+  vm_name           = "SE_bastille-installer-box"
   write_zeros       = "true"
 }
 
@@ -82,7 +82,7 @@ source "qemu" "archlinux" {
 }
 
 build {
-  name = "bastillebox-installer-box"
+  name = "SE_bastille-installer-box"
   sources = ["source.qemu.archlinux"]
   
   provisioner "file" {

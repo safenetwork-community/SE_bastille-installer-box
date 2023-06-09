@@ -7,8 +7,8 @@ command = "packer"
 subcommand = "build"
 
 # File names
-template = "bastillebox-installer-box.pkr.hcl"
-vm_name = "bastillebox-installer-box_qemu_archlinux-2023-05.qcow2"
+template = "SE_bastille-installer-box.pkr.hcl"
+vm_name = "SE_bastille-installer-box_qemu_archlinux-2023-05.qcow2"
 
 # Folder locations
 path_output = "./output"
@@ -30,7 +30,7 @@ if Path(path_output_os).is_dir():
 # Run packer
 args = [command, subcommand, template]
 print(' '.join(args)) 
-subprocess.run(args)
+subprocess.run(args, env={"PACKER_LOG": "1"})
 
 # Move box to virt-manager 
 if Path(path_output).exists() and Path(path_output).is_dir():  
