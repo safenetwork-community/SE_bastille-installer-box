@@ -1,14 +1,18 @@
 #!/usr/bin/env python
 
 from pathlib import Path
-import subprocess
+import subprocess, os
 
 command = "packer"
 subcommand = "build"
 
+# Environment variables
+packer_env = os.environ.copy()
+packer_env["PACKER_LOG"] = "1"
+
 # File names
 template = "SE_bastille-installer-box.pkr.hcl"
-vm_name = "SE_bastille-installer-box_qemu_archlinux-2023-05.qcow2"
+vm_name = "SE_bastille-installer-box_qemu_archlinux-2023-06.qcow2"
 
 # Folder locations
 path_output = "./output"
@@ -27,10 +31,12 @@ if Path(path_output).is_dir():
 if Path(path_output_os).is_dir(): 
     subprocess.run(["rm", "-r", path_output_os])
 
+
+
 # Run packer
 args = [command, subcommand, template]
 print(' '.join(args)) 
-subprocess.run(args, env={"PACKER_LOG": "1"})
+subprocess.run(args, env=packer_env)
 
 # Move box to virt-manager 
 if Path(path_output).exists() and Path(path_output).is_dir():  
