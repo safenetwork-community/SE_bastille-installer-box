@@ -5,6 +5,7 @@ import subprocess, os
 
 command = "packer"
 subcommand = "build"
+option1 = "-only=SE_bastille-installer-box.virtualbox-iso.archlinux"
 
 # Environment variables
 packer_env = os.environ.copy()
@@ -16,7 +17,9 @@ vm_name = "SE_bastille-installer-box_qemu_archlinux-2023-06.qcow2"
 
 # Folder locations
 path_output = "./output"
-path_output_os = "./output-artix"
+path_output_qemu = "./output-archlinux"
+path_output_vbox = "/home/folaht/VirtualBox VMs"
+
 path_virt_manager = "/var/lib/libvirt/images/"
 
 # File locations
@@ -28,13 +31,16 @@ if Path(path_output).is_dir():
     subprocess.run(["rm", "-r", path_output])
 
 # delete os output folder if it exists
-if Path(path_output_os).is_dir(): 
-    subprocess.run(["rm", "-r", path_output_os])
+if Path(path_output_qemu).is_dir(): 
+    subprocess.run(["rm", "-r", path_output_qemu])
 
-
+# delete os output folder if it exists
+if Path(path_output_vbox).is_dir():
+    print("deleting vbox path..")
+    subprocess.run(["rm", "-r", path_output_vbox])
 
 # Run packer
-args = [command, subcommand, template]
+args = [command, subcommand, option1, template]
 print(' '.join(args)) 
 subprocess.run(args, env=packer_env)
 

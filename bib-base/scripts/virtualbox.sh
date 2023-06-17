@@ -1,4 +1,4 @@
-#!/usr/bin/bash -x
+#!/usr/bin/env bash
 
 . /root/vars.sh
 
