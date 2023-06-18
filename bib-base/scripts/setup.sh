@@ -65,9 +65,11 @@ echo "==> ${NAME_SH}: Creating ssh access for ${USER_NAME}.."
 echo "==> ${NAME_SH}: Adding workaround for shutdown race condition.."
 /usr/bin/install --mode=0644 ${TMP_FILES_DIR}/poweroff.timer "${ROOT_DIR}/etc/systemd/system/poweroff.timer"
 
-echo "==> ${NAME_SH}: Trimming partition sizes.."
-/usr/bin/fstrim ${BOOT_DIR}
-/usr/bin/fstrim ${ROOT_DIR}
+if [[ $PACKER_BUILDER_TYPE == "qemu" ]]; then
+  echo "==> ${NAME_SH}: Trimming partition sizes.."
+  /usr/bin/fstrim ${BOOT_DIR}
+  /usr/bin/fstrim ${ROOT_DIR}
+fi
 
 echo "==> ${NAME_SH}: Completing installation.."
 /usr/bin/umount ${BOOT_DIR}

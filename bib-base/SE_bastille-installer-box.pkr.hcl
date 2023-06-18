@@ -36,15 +36,21 @@ variable "ssh_username" {
 locals {
   boot_command_qemu = [
     "<wait5><enter><wait2m>",
-    "curl http://{{ .HTTPIP }}:{{ .HTTPPort }}<enter>",
-    "curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/${local.kickstart_script} && chmod +x ${local.kickstart_script} && ./${local.kickstart_script} {{ .HTTPPort }}<enter>",
+    "curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/${local.kickstart_script} && ",
+    "chmod +x ${local.kickstart_script} && ",
+    "LOCAL_IP={{ .HTTPIP }} ",
+    "LOCAL_PORT={{ .HTTPPort }} ",
+    "PACKER_BUILDER_TYPE=qemu ",
+    "./${local.kickstart_script}<enter>",
   ]
   boot_command_virtualbox = [
-    "<enter><wait2m>",
-    "ls -lha<enter>",
-    "echo test<enter>",
-    "curl http://{{ .HTTPIP }}:{{ .HTTPPort }}<enter><wait5>",
-    "curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/${local.kickstart_script} && chmod +x ${local.kickstart_script} && ./${local.kickstart_script} {{ .HTTPPort }}<enter>",
+    "<enter><wait90s>",
+    "curl -O http://10.0.2.3:{{ .HTTPPort }}/${local.kickstart_script} && ",
+    "chmod +x ${local.kickstart_script} && ",
+    "LOCAL_IP=10.0.2.3 ",
+    "LOCAL_PORT={{ .HTTPPort }} ",
+    "PACKER_BUILDER_TYPE=iso-virtualbox ",
+    "./${local.kickstart_script}<enter>",
   ]
   cpus              = 1
   disk_size         = "4G"
@@ -100,13 +106,14 @@ source "virtualbox-iso" "archlinux" {
     format                 = "ovf"  
     guest_additions_mode   = "disable"
     guest_os_type          = "Arch"
-    hard_drive_interface   = "sata"
+    hard_drive_interface   = "virtio"
     headless               = local.headless
-    http_directory         = local.http_directory  
+    http_directory         = local.http_directory
     iso_checksum           = local.iso_checksum
-    iso_interface          = "sata"
+    iso_interface          = "virtio"
     iso_url                = local.iso_url
     memory                 = local.memory
+    nic_type               = "virtio"
     shutdown_command       = "sudo systemctl start poweroff.timer"
     ssh_port               = 22
     ssh_private_key_file   = var.ssh_private_key_file 
@@ -162,7 +169,7 @@ build {
   }
     
   post-processor "vagrant" {
-    output = "output/${local.vm_name}_${source.type}_${source.name}-${formatdate("YYYY-MM", timestamp())}.qcow2"
+    output = "output/${local.vm_name}_${source.type}_${source.name}-${formatdate("YYYY-MM", timestamp())}.box"
     vagrantfile_template = "templates/vagrantfile.tpl"
   }
 }

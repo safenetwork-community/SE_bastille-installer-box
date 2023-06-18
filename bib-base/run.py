@@ -3,17 +3,22 @@
 from pathlib import Path
 import subprocess, os
 
+vm_name = "SE_bastille-installer-box"
+vm_hv = "virtualbox-iso"
+vm_os = "archlinux"
+vm_ym = "2023-06"
+
 command = "packer"
 subcommand = "build"
-option1 = "-only=SE_bastille-installer-box.virtualbox-iso.archlinux"
+option1 = f"-only={vm_name}.{vm_hv}.{vm_os}"
 
 # Environment variables
 packer_env = os.environ.copy()
 packer_env["PACKER_LOG"] = "1"
 
 # File names
-template = "SE_bastille-installer-box.pkr.hcl"
-vm_name = "SE_bastille-installer-box_qemu_archlinux-2023-06.qcow2"
+template = f"{vm_name}.pkr.hcl"
+vm_filename = f"{vm_name}_{vm_hv}_{vm_os}-{vm_ym}.qcow2"
 
 # Folder locations
 path_output = "./output"
@@ -23,8 +28,8 @@ path_output_vbox = "/home/folaht/VirtualBox VMs"
 path_virt_manager = "/var/lib/libvirt/images/"
 
 # File locations
-location_vm_old = f"{path_output}/{vm_name}"
-location_vm_new = f"{path_virt_manager}/{vm_name}"
+location_vm_old = f"{path_output}/{vm_filename}"
+location_vm_new = f"{path_virt_manager}/{vm_filename}"
 
 # delete output folder if it exists
 if Path(path_output).is_dir(): 

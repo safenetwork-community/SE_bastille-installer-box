@@ -5,11 +5,10 @@
 HOST_LIVEVM_NAME="Arch-liveVM"
 
 # Drives and partitions
-
 if [[ $PACKER_BUILDER_TYPE == "qemu" ]]; then
   DISK='/dev/vda'
-else
-  DISK='/dev/sda'
+ else
+   DISK='/dev/sda'
 fi
 BOOT_DIR='/mnt/boot/efi'
 ROOT_DIR='/mnt'
