@@ -27,7 +27,7 @@ tree-sitter-toml = "0.0.31"
 "tokyonight.nvim" = "4.11.0"
 "which-key.nvim" = "3.14.1"
 "mini.icons" = "0.14.0"
-"dropbar.nvim" = "9.0.2"
+"dropbar.nvim" = "10.0.0"
 "rocks-git.nvim" = "2.5.2"
 
 [plugins.vim-suda]

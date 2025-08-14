@@ -52,7 +52,7 @@ tee "${DIR_MNT_ROOT}${SCRIPT_CONFIG}" &>/dev/null <<-EOF
   echo "==> ${NAME_SH} Add autologin.."
   /usr/bin/sed -i 's@/agetty-default tty1@/agetty-default -a ${NAME_USER} tty1@' /etc/dinit.d/tty1
   echo "==> ${NAME_SH} Install ${NAME_TITLE_APP} non-AUR dependencies.."
-  /usr/bin/pacman -S --noconfirm artools-base cargo dialog dosfstools f2fs-tools parted polkit qemu-user-static-binfmt wget >/dev/null 
+  /usr/bin/pacman -S --noconfirm artools-base cargo dialog dosfstools f2fs-tools luarocks parted pkgconf polkit qemu-user-static-binfmt wget >/dev/null 
   echo "==> ${NAME_SH} Install AUR package manager.."
   /usr/bin/pacman -S --noconfirm trizen >/dev/null 
   echo "==> ${NAME_SH} Set default branch git.."
@@ -85,21 +85,17 @@ tee "${DIR_MNT_ROOT}${SCRIPT_CONFIG}" &>/dev/null <<-EOF
   echo "==> ${NAME_SH} Install dependencies.."
   /usr/bin/pacman -S --noconfirm neovim >/dev/null
   echo "==> ${NAME_SH} Install a general IDE for the main user.."
-  sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' &>/dev/null <<-E1F \
-  | LV_BRANCH='release-1.3/neovim-0.9' sudo -u ${NAME_USER} \
-  curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.3/neovim-0.9/utils/installer/install.sh \
-  | sudo -u ${NAME_USER} bash &>/dev/null
-    n
-    n
-    y
-E1F
+  luarocks --lua-version=5.4 --tree ${DIR_HOME_USER}/.local/share/nvim/rocks --server='https://nvim-neorocks.github.io/rocks-binaries/' install rocks.nvim
+  /usr/bin/nvim -c "Rocks sync"
+  /usr/bin/nvim -c "MasonInstall lua-language-server rust-analyzer taplo"
   echo "==> ${NAME_SH} Setup bash aliases.."
-  sudo -u ${NAME_USER} sponge -a ${DIR_HOME_USER}/.profile ${DIR_HOME_ROOT}/.profile <<'E1F'
-  alias l='ls -lF --color'
-  alias ll='l -a'
-  alias h='history 25'
-  alias j='jobs -l'
-  alias vim='lvim'
+  sudo -u ${NAME_USER} sponge -a ${DIR_HOME_USER}/.bashrc ${DIR_HOME_ROOT}/.bashrc <<'E1F'
+
+alias l='ls -lF --color'
+alias ll='l -a'
+alias h='history 25'
+alias j='jobs -l'
+alias vim='nvim'
 E1F
   echo "==> ${NAME_SH} Cleaning up.."
   /usr/bin/pacman -Rcns --noconfirm base-devel gptfdisk go moreutils rsync trizen >/dev/null
